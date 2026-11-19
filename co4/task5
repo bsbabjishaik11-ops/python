@@ -1,1 +1,18 @@
 
+from reader import read_file
+from stats import percentage
+from report import write_report
+
+data = read_file("attendance.txt")
+
+result = []
+
+for line in data:
+    parts = line.strip().split(",")
+
+    if len(parts) == 3:
+        result.append(parts)
+
+write_report("report.txt", result)
+
+print("Attendance Report Generated")
