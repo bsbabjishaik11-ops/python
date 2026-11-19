@@ -1,1 +1,21 @@
+import random
 
+readings = [random.randint(0, 20) for i in range(365)]
+
+weekly_totals = []
+
+for i in range(0, 365, 7):
+    weekly_totals.append(sum(readings[i:i+7]))
+
+print("Weekly Totals:", weekly_totals)
+print("Wettest Week:", weekly_totals.index(max(weekly_totals)) + 1)
+print("Driest Week:", weekly_totals.index(min(weekly_totals)) + 1)
+
+moving_average = []
+
+for i in range(len(readings) - 6):
+    avg = sum(readings[i:i+7]) / 7
+    moving_average.append(avg)
+
+print("7-Day Moving Average:", moving_average)
+print("Dry Days:", [i+1 for i, x in enumerate(readings) if x == 0])
