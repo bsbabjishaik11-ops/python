@@ -1,1 +1,75 @@
+import os
+import re
 
+def valid_email(email):
+    return re.match(r"^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$", email)
+
+def process_files():
+    students = {}
+    events = {}
+    seen = set()
+    errors = []
+
+    for i in range(1, 6):
+        filename = f"department{i}.txt"
+
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                for line_no, line in enumerate(f, 1):
+                    try:
+                        parts = line.strip().split(",")
+
+                        if len(parts) != 5:
+                            raise ValueError("Invalid fields")
+
+                        reg, name, dept, email, event_list = parts
+
+                        if not valid_email(email):
+                            raise ValueError("Invalid email")
+
+                        if reg in seen:
+                            continue
+
+                        seen.add(reg)
+
+                        students[reg] = {
+                            "name": name,
+                            "department": dept,
+                            "email": email
+                        }
+
+                        for event in event_list.split(";"):
+                            event = event.strip()
+
+                            if event:
+                                events.setdefault(event, []).append(reg)
+
+                    except ValueError as e:
+                        errors.append(
+                            f"{filename}, Line {line_no}: {e}"
+                        )
+
+        except FileNotFoundError:
+            errors.append(f"{filename}: File missing")
+
+    with open("master_list.txt", "w", encoding="utf-8") as f:
+        for reg, details in students.items():
+            f.write(f"{reg}, {details}\n")
+
+    for event, participants in events.items():
+        with open(f"{event}.txt", "w", encoding="utf-8") as f:
+            for reg in participants:
+                f.write(reg + "\n")
+
+    with open("summary.txt", "w", encoding="utf-8") as f:
+        f.write(f"Total Students: {len(students)}\n")
+        f.write(f"Total Events: {len(events)}\n")
+
+    with open("error.log", "w", encoding="utf-8") as f:
+        f.write("\n".join(errors))
+
+    print("Fest Registration Completed")
+    print("Total Students:", len(students))
+    print("Total Events:", len(events))
+
+process_files()
