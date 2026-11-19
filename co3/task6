@@ -1,1 +1,67 @@
+trains = {
+    101: {
+        "name": "Chennai Express",
+        "stations": [
+            ("Chennai", "06:00", "06:10"),
+            ("Vijayawada", "10:00", "10:10"),
+            ("Hyderabad", "14:00", "14:10")
+        ],
+        "days": {"Monday", "Wednesday", "Friday"}
+    },
 
+    102: {
+        "name": "Bangalore Express",
+        "stations": [
+            ("Chennai", "07:00", "07:10"),
+            ("Katpadi", "09:00", "09:10"),
+            ("Bangalore", "12:00", "12:10")
+        ],
+        "days": {"Tuesday", "Thursday", "Saturday"}
+    },
+
+    103: {
+        "name": "Mumbai Express",
+        "stations": [
+            ("Chennai", "08:00", "08:10"),
+            ("Vijayawada", "12:00", "12:10"),
+            ("Mumbai", "22:00", "22:10")
+        ],
+        "days": {"Monday", "Tuesday", "Friday"}
+    },
+
+    104: {
+        "name": "Delhi Express",
+        "stations": [
+            ("Chennai", "09:00", "09:10"),
+            ("Nagpur", "15:00", "15:10"),
+            ("Delhi", "22:00", "22:10")
+        ],
+        "days": {"Wednesday", "Friday"}
+    },
+
+    105: {
+        "name": "Kerala Express",
+        "stations": [
+            ("Chennai", "10:00", "10:10"),
+            ("Coimbatore", "14:00", "14:10"),
+            ("Kochi", "18:00", "18:10")
+        ],
+        "days": {"Monday", "Tuesday", "Thursday"}
+    }
+}
+
+station = "Chennai"
+day = "Monday"
+
+result = []
+
+for number, details in trains.items():
+    if day in details["days"]:
+        for s, arrival, departure in details["stations"]:
+            if s == station:
+                result.append((departure, number, details["name"]))
+
+result.sort(key=lambda x: x[0])
+
+for departure, number, name in result:
+    print(number, name, departure)
