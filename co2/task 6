@@ -1,1 +1,63 @@
+from functools import lru_cache
 
+calls = 0
+
+
+def ways_naive(n):
+
+    global calls
+    calls += 1
+
+    if n <= 1:
+        return 1
+
+    return ways_naive(n - 1) + ways_naive(n - 2)
+
+
+@lru_cache(maxsize=None)
+def ways_memo(n):
+
+    global calls
+    calls += 1
+
+    if n <= 1:
+        return 1
+
+    return ways_memo(n - 1) + ways_memo(n - 2)
+
+
+def ways_loop(n):
+
+    if n <= 1:
+        return 1
+
+    a = 1
+    b = 1
+
+    for i in range(2, n + 1):
+        a, b = b, a + b
+
+    return b
+
+
+print("Steps and Ways:")
+
+for i in range(11):
+    print(i, ":", ways_loop(i))
+
+
+calls = 0
+print("\nNaive:", ways_naive(25))
+print("Naive calls:", calls)
+
+
+ways_memo.cache_clear()
+calls = 0
+
+print("\nMemo:", ways_memo(25))
+print("Memo calls:", calls)
+
+
+print("\nLoop:", ways_loop(25))
+
+print("\n1000 Steps:", ways_loop(1000))
