@@ -1,1 +1,32 @@
+import os
 
+attendance = {}
+
+folder = "attendance"
+
+for filename in os.listdir(folder):
+    if filename.endswith(".txt"):
+        with open(os.path.join(folder, filename), "r") as f:
+            for line in f:
+                parts = line.strip().split(",")
+
+                if len(parts) == 3:
+                    reg, date, status = parts
+
+                    if status in ["P", "A"]:
+                        if reg not in attendance:
+                            attendance[reg] = [0, 0]
+
+                        if status == "P":
+                            attendance[reg][0] += 1
+                        else:
+                            attendance[reg][1] += 1
+
+with open("attendance_report.txt", "w") as f:
+    for reg, counts in attendance.items():
+        total = sum(counts)
+        percentage = counts[0] / total * 100 if total else 0
+        f.write(f"{reg}: {percentage:.2f}%\n")
+
+        if percentage < 75:
+            print(reg, "Below 75%")
