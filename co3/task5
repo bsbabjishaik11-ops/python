@@ -1,1 +1,16 @@
+readings = [3, 5, 7, 9, 55, -60, 4, 6, 10]
+
+valid = [x for x in readings if -50 <= x <= 50]
+
+fahrenheit = [(x * 9/5) + 32 for x in valid]
+
+alarm_minutes = [
+    i for i, x in enumerate(readings)
+    if x < 2 or x > 8
+]
+
+print("Original Readings:", readings)
+print("Valid Readings:", valid)
+print("Fahrenheit:", fahrenheit)
+print("Alarm Minutes:", alarm_minutes)
 
