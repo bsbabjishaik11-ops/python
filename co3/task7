@@ -1,1 +1,62 @@
+import time
+
+contacts = [
+    {
+        "name": "Dr. Ravi",
+        "phone": "+91 98400 12345",
+        "email": "ravi@gmail.com"
+    },
+    {
+        "name": "Ravi Kumar",
+        "phone": "9840012345",
+        "email": "rk@gmail.com"
+    },
+    {
+        "name": "Arun",
+        "phone": "9876543210",
+        "email": "arun@gmail.com"
+    },
+    {
+        "name": "Priya",
+        "phone": "9123456789",
+        "email": "priya@gmail.com"
+    }
+]
+
+def normalize(phone):
+    return "".join(ch for ch in phone if ch.isdigit())[-10:]
+
+def merge_contacts(contacts):
+    merged = {}
+
+    for contact in contacts:
+        number = normalize(contact["phone"])
+
+        if number not in merged:
+            merged[number] = {
+                "name": contact["name"],
+                "phones": set(),
+                "emails": set()
+            }
+
+        merged[number]["phones"].add(number)
+
+        if contact.get("email"):
+            merged[number]["emails"].add(contact["email"])
+
+    return merged
+
+start = time.time()
+
+result = merge_contacts(contacts)
+
+end = time.time()
+
+for number, details in result.items():
+    print("Name:", details["name"])
+    print("Phone:", sorted(details["phones"]))
+    print("Email:", sorted(details["emails"]))
+    print()
+
+print("Execution Time:", end - start)
 
